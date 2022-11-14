@@ -35,24 +35,24 @@ public class CommandContext {
         return router;
     }
 
-    Client getClient() {
+    public Client getClient() {
         return client;
     }
 
-    NodeId getClientLeader() {
+    public NodeId getClientLeader() {
         return client.getServerRouter().getLeaderId();
     }
 
-    void setClientLeader(NodeId nodeId) {
+    public void setClientLeader(NodeId nodeId) {
         client.getServerRouter().setLeaderId(nodeId);
     }
 
-    void clientAddServer(String nodeId, String host, int portService) {
+    public void clientAddServer(String nodeId, String host, int portService) {
         serverMap.put(new NodeId(nodeId), new Address(host, portService));
         client = new Client(buildServerRouter(serverMap));
     }
 
-    boolean clientRemoveServer(String nodeId) {
+    public boolean clientRemoveServer(String nodeId) {
         Address address = serverMap.remove(new NodeId(nodeId));
         if (address != null) {
             client = new Client(buildServerRouter(serverMap));
@@ -61,7 +61,7 @@ public class CommandContext {
         return false;
     }
 
-    void setRunning(boolean running) {
+    public void setRunning(boolean running) {
         this.running = running;
     }
 
@@ -69,7 +69,7 @@ public class CommandContext {
         return running;
     }
 
-    void printSeverList() {
+    public void printSeverList() {
         for (NodeId nodeId : serverMap.keySet()) {
             Address address = serverMap.get(nodeId);
             System.out.println(nodeId + "," + address.getHost() + "," + address.getPort());

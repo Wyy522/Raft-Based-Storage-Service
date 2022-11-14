@@ -20,6 +20,7 @@
     <modules>
         <module>raft-core</module>
         <module>raft-kvstore</module>
+        <module>raft-store</module>
     </modules>
 
     <dependencyManagement>

@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="raft-core" />
         <module name="raft-kvstore" />
+        <module name="raft-store" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="raft-core" target="8" />
       <module name="raft-kvstore" target="8" />
       <module name="raft-parent" target="1.8" />
+      <module name="raft-store" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

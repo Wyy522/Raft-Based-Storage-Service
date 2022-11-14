@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/raft-core/raft-core.iml" filepath="$PROJECT_DIR$/raft-core/raft-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/raft-kvstore/raft-kvstore.iml" filepath="$PROJECT_DIR$/raft-kvstore/raft-kvstore.iml" />
       <module fileurl="file://$PROJECT_DIR$/raft-parent.iml" filepath="$PROJECT_DIR$/raft-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/raft-store/raft-store.iml" filepath="$PROJECT_DIR$/raft-store/raft-store.iml" />
     </modules>
   </component>
 </project>

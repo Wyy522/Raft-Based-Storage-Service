@@ -21,9 +21,13 @@ abstract class AbstractLog implements Log {
     private static final Logger logger = LoggerFactory.getLogger(AbstractLog.class);
 
     protected final EventBus eventBus;
+
     protected EntrySequence entrySequence;
+
     protected StateMachine stateMachine = new EmptyStateMachine();
+
     protected int commitIndex = 0;
+
     AbstractLog(EventBus eventBus) {
         this.eventBus = eventBus;
     }
@@ -255,6 +259,21 @@ abstract class AbstractLog implements Log {
         return entrySequence.getLogByKey(key);
     }
 
+    @Override
+    public int getNextIndex() {
+        return entrySequence.getNextLogIndex();
+    }
+
+    @Override
+    public int getCommitIndex() {
+        return entrySequence.getCommitIndex();
+    }
+
+    @Override
+    public void close() {
+        entrySequence.close();
+    }
+
     //操作leader传来的日志条目数组
     private static class EntrySequenceView implements Iterable<Entry> {
 
@@ -313,20 +332,7 @@ abstract class AbstractLog implements Log {
         }
     }
 
-    @Override
-    public int getNextIndex() {
-        return entrySequence.getNextLogIndex();
-    }
 
-    @Override
-    public int getCommitIndex() {
-        return entrySequence.getCommitIndex();
-    }
-
-    @Override
-    public void close() {
-        entrySequence.close();
-    }
 }
 
 

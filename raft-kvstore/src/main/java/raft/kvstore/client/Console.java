@@ -9,6 +9,7 @@ import org.jline.reader.impl.completer.NullCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import raft.core.node.base.NodeId;
 import raft.core.rpc.Address;
+import raft.kvstore.client.command.*;
 
 import java.util.Arrays;
 import java.util.Collection;
