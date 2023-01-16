@@ -5,238 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_alibaba_fastjson_1_2_75.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_directory_studio_org_apache_commons_lang_2_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/raft-store.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/Constant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/LSMTreeImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/MemTable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/ParseIndex.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/SSTable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/SSTableMetaData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/SSTableToMem.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/SSTableToMemIterator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/WAL.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/WALImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/excpetion/ioException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/excpetion/randomAccessFileException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/excpetion/writeException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/utils/BufferUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/utils/FileUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/raft-store/src/test/java/raft/store/testLsmTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/log/AbstractLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/log/AbstractLog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/ChannelException.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/exception/ChannelException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/NoAvailableServerException.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/exception/NoAvailableServerException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/RedirectException.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/exception/RedirectException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/ServerRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/ServerRouter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/support/RandomAccessFileAdapter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/support/SeekableFile.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/raft/core/Protos.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/log4j2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesResult$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesResult$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesResultOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$Entry$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$Entry$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$Entry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc$EntryOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpc.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$AppendEntriesRpcOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$NodeEndpoint$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$NodeEndpoint$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$NodeEndpoint.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$NodeEndpointOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteResult$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteResult$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteResultOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteRpc$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteRpc$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteRpc.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$RequestVoteRpcOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$SetCommand$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$SetCommand$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$SetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos$SetCommandOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/Protos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/AbstractLog$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/AbstractLog$EntrySequenceView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/AbstractLog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/Log.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/MemoryLog.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/command/SetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/AbstractEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/Entry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/EntryFactory.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/EntryMeta.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/GeneralEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/entry/NoOpEntry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/execption/EmptySequenceException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/execption/LogException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/execption/NotLeaderException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/execption/StateMachineException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/sequence/AbstractEntrySequence.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/sequence/EntrySequence.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/sequence/memory/MemoryEntrySequence.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/statemachine/AbstractSingleThreadStateMachine.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/statemachine/EmptyStateMachine.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/log/statemachine/StateMachine.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/Node.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/NodeBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/NodeContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/NodeImpl$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/NodeImpl$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/NodeImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/GroupMember.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/NodeEndpoint.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/NodeGroup$NodeMatchIndex.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/NodeGroup.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/NodeId.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/base/ReplicatingState.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/AbstractNodeRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/CandidateNodeRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/FollowerNodeRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/LeaderNodeRole.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/RoleName.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/role/RoleNameAndLeaderId.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/store/MemoryNodeStore.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/store/NodeStore.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/node/store/NodeStoreException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/Address.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/Channel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/Connector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/exception/ChannelConnectException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/exception/ChannelException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/exception/ConnectorException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/AbstractRpcMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/AppendEntriesResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/AppendEntriesResultMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/AppendEntriesRpc.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/AppendEntriesRpcMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/MessageConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/RequestVoteResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/RequestVoteRpc.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/message/RequestVoteRpcMessage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/AbstractHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/Decoder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/Encoder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/FromRemoteHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/InboundChannelGroup.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/NioChannel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/NioConnector$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/NioConnector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/OutboundChannelGroup$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/OutboundChannelGroup.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/rpc/nio/ToRemoteHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/scheduler/DefaultScheduler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/scheduler/ElectionTimeout.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/scheduler/LogReplicationTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/scheduler/NullScheduledFuture.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/scheduler/Scheduler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/service/Channel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/service/ChannelException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/service/NoAvailableServerException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/service/RedirectException.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/service/ServerRouter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/support/RandomAccessFileAdapter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/support/SeekableFile.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/support/SingleThreadTaskExecutor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/classes/raft/core/support/TaskExecutor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/target/raft-core-1.0-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ClientAddServerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ClientAddServerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ClientGetLeaderCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ClientGetLeaderCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ClientListServerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ClientListServerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ClientRemoveServerCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ClientRemoveServerCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ClientSetLeaderCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ClientSetLeaderCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/Command.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/CommandContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/CommandContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/Console.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/ExitCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/ExitCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/KVStoreGetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/KVStoreGetCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/KVStoreSetCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/KVStoreSetCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/RaftAddNodeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/RaftAddNodeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/RaftRemoveNodeCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/command/RaftRemoveNodeCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/SocketChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/SocketChannel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/MessageConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Failure$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Failure$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Failure.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$FailureOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommand$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommand$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommandOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommandResponse$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommandResponse$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommandResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$GetCommandResponseOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Redirect$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Redirect$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Redirect.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$RedirectOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$SetCommand$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$SetCommand$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$SetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$SetCommandOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Success$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Success$Builder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$Success.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos$SuccessOrBuilder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/Protos.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/Client.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ClientAddServerCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ClientGetLeaderCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ClientListServerCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ClientRemoveServerCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ClientSetLeaderCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/Command.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/CommandContext.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/Console.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ConsoleLauncher$ServerConfig.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ConsoleLauncher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/ExitCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/KVStoreGetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/KVStoreSetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/RaftAddNodeCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/RaftRemoveNodeCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/client/SocketChannel.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/CommandRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/Failure.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/GetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/GetCommandResponse.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/Redirect.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/SetCommand.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/message/Success.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Decoder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Encoder.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Server$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Server.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/ServerLauncher.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Service$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Service$StateMachineImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/Service.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/classes/raft/kvstore/server/ServiceHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/maven-archiver/pom.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/original-raft-kvstore-1.0-SNAPSHOT.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/raft-kvstore-1.0-SNAPSHOT-shaded.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/target/raft-kvstore-1.0-SNAPSHOT.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/LSMTreeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/LSMTreeImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -507,7 +277,18 @@
       <workItem from="1668045965922" duration="91000" />
       <workItem from="1668074007118" duration="181000" />
       <workItem from="1668241233381" duration="275000" />
-      <workItem from="1668421499553" duration="2945000" />
+      <workItem from="1668421499553" duration="4366000" />
+      <workItem from="1668649250519" duration="1217000" />
+      <workItem from="1668752269822" duration="55000" />
+      <workItem from="1670041741424" duration="109000" />
+      <workItem from="1670404046612" duration="607000" />
+      <workItem from="1671596848682" duration="1926000" />
+      <workItem from="1671804979082" duration="71000" />
+      <workItem from="1672417063006" duration="1658000" />
+      <workItem from="1672581437840" duration="17000" />
+      <workItem from="1672642786772" duration="1787000" />
+      <workItem from="1672657361433" duration="4143000" />
+      <workItem from="1673607726599" duration="681000" />
     </task>
     <servers />
   </component>

@@ -153,7 +153,7 @@ public class LSMTreeImpl {
         }
 
         if (command==null){
-            System.out.println("log :为找到该值");
+            System.out.println("log :未找到该值");
             return null;
         }
         return command;
