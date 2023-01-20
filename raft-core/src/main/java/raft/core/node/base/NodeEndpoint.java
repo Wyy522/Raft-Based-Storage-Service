@@ -13,6 +13,9 @@ public class NodeEndpoint {
     private final  NodeId id;
     private final Address address;
 
+
+
+
     //节点ID,ip,端口构造函数
     public NodeEndpoint(String  id,String host,int port) {
         this(new NodeId(id),new Address(host,port));
