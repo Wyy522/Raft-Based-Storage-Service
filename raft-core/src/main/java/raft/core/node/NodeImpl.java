@@ -48,38 +48,9 @@ public class NodeImpl implements Node {
         this.context = context;
     }
 
-    //包可见,获取核心组件上下文
-    public NodeContext getContext() {
-        return this.context;
-    }
-
-    //包可见,获取当前角色
-    public AbstractNodeRole getRole() {
-        return this.role;
-    }
-
-    private static final FutureCallback<Object> LOGGING_FUTURE_CALLBACK = new FutureCallback<Object>() {
-        @Override
-        public void onSuccess(@Nullable Object result) {
-        }
-
-        @Override
-        public void onFailure(@Nonnull Throwable t) {
-            logger.warn("failure", t);
-        }
-    };
-
-    public byte[] getLogByKey(String key){
-        if (key==null){
-            throw new LogException("key is null");
-        }
-        return context.log().getLogByKey(key);
-    }
-
     //Node启动
     @Override
     public synchronized void start() {
-
         //如果已经启动则直接跳过
         if (started) {
             return;
@@ -95,13 +66,29 @@ public class NodeImpl implements Node {
         NodeStore store = context.store();
 
         //统一角色转换(节点初次启动设置Follower相关参数)
-        changeToRole(new FollowerNodeRole(store.getTerm(),
-                store.getVotedFor(),
-                null,
-                scheduleElectionTimeout()));
+        changeToRole(new FollowerNodeRole(store.getTerm(), store.getVotedFor(), null, scheduleElectionTimeout()));
 
         //设置节点状态为启动
         started = true;
+    }
+
+    //统一角色变化,以及在角色变化时同步到NodeStore中
+    private void changeToRole(AbstractNodeRole newRole) {
+        //打印日志
+        logger.debug("node {},role state changed ->{}", context.getSelfId(), newRole);
+
+        //获取上下文环境中节点的状态信息
+        NodeStore store = context.store();
+
+        //将上下文环境中节点状态信息中的任期号持久化
+        store.setTerm(newRole.getTerm());
+
+        //如果是Follower,则将上下文环境中的投票信息持久化
+        if (newRole.getName() == RoleName.FOLLOWER) {
+            store.setVotedFor(((FollowerNodeRole) newRole).getVotedFor());
+        }
+
+        role = newRole;
 
     }
 
@@ -126,7 +113,7 @@ public class NodeImpl implements Node {
     }
 
     @Override
-    public  void registerStateMachine( StateMachine stateMachine) {
+    public void registerStateMachine(StateMachine stateMachine) {
         Preconditions.checkNotNull(stateMachine);
         System.out.println("StateMachine 已注入");
         context.log().setStateMachine(stateMachine);
@@ -159,25 +146,6 @@ public class NodeImpl implements Node {
         return role.getNameAndLeaderId(context.selfId());
     }
 
-    //统一角色变化,以及在角色变化时同步到NodeStore中
-    private void changeToRole(AbstractNodeRole newRole) {
-        //打印日志
-        logger.debug("node {},role state changed ->{}", context.getSelfId(), newRole);
-
-        //获取上下文环境中节点的状态信息
-        NodeStore store = context.store();
-
-        //将上下文环境中节点状态信息中的任期号持久化
-        store.setTerm(newRole.getTerm());
-
-        //如果是Follower,则将上下文环境中的投票信息持久化
-        if (newRole.getName() == RoleName.FOLLOWER) {
-            store.setVotedFor(((FollowerNodeRole) newRole).getVotedFor());
-        }
-
-        role = newRole;
-
-    }
 
     //特殊的角色切换方法,有一个是否设置选举超时参数
     private void becomeFollower(int term, NodeId votedFor, NodeId leaderId, boolean scheduleElectionTimeout) {
@@ -197,12 +165,12 @@ public class NodeImpl implements Node {
 
     //————————————————————————————————————————————选举———————————————————————————————————————————————————————————————————
 
-    //设置一个选举超时定时任务(当超时后由TaskExecutor的实现类异步调用选举的具体逻辑)
+    //设置一个选举超时定时任务(当超时后由TaskExecutor的实现类异步调用选举的具体逻辑)  到时间后在定时线程(异步单线程)中执行
     private ElectionTimeout scheduleElectionTimeout() {
         return context.scheduler().scheduleElectionTimeout(this::electionTimout);
     }
 
-    //提交选举超时任务(超时后调用此逻辑)
+    //提交选举超时任务(超时后调用此逻辑)  定时线程到时后在处理逻辑线程中(异步单线程)调用此逻辑
     public void electionTimout() {
         context.taskExecutor().submit(this::doProcessElectionTimeout);
     }
@@ -262,26 +230,23 @@ public class NodeImpl implements Node {
     private RequestVoteResult doProcessRequestVoteRpc(RequestVoteRpcMessage rpcMessage) {
 
         RequestVoteRpc rpc = rpcMessage.get();
-
-        //1.首先判断对方的term决定是否投票
-        //  (1)比自己小：不投票且返回自己的term(说明当前自己就是leader);
-        //  (2)比自己大：投票且切换自己为Follower更新自己的term;
-        //  (3)与自己等：
-        //          ①当前自己是Follower:比较日志进度,比自己的日志进度新且自己还未投票,则投票更新自己的term;
-        //                             若自己以投票给该节点,则投票更新自己的term;
-        //                             比自己日志进度旧无论投没投票,不投票且返回自己的term;
-        //          ②当前自己是Candidate:不投票,因为切换角色时以给自己投过票;
-        //          ③当前自己是Leader:不投票且返回自己的term
-        //2.构造响应candidate的Rpc
-
-
-        //如果对方的term比自己小,则不投票且返回自己的term给对象(说明自己就是leader)
+        /** 基本流程
+         1.首先判断对方的term决定是否投票
+         (1)比自己小：不投票且返回自己的term(说明当前自己就是leader);
+         (2)比自己大：投票且切换自己为Follower更新自己的term;
+         (3)与自己等：
+         ①当前自己是Follower:比较日志进度,比自己的日志进度新且自己还未投票,则投票更新自己的term;
+         若自己以投票给该节点,则投票更新自己的term;
+         比自己日志进度旧无论投没投票,不投票且返回自己的term;
+         ②当前自己是Candidate:不投票,因为切换角色时以给自己投过票;
+         ③当前自己是Leader:不投票且返回自己的term
+         2.构造响应candidate的Rpc
+         如果对方的term比自己小,则不投票且返回自己的term给对象(说明自己就是leader)
+        **/
         if (rpc.getTerm() < role.getTerm()) {
             logger.debug("term from rpc < current term, don't vote ({} < {})", rpc.getTerm(), role.getTerm());
             return new RequestVoteResult(role.getTerm(), false);
         }
-
-
 
         //如果对象的term比自己大,则切换为Follower角色
         if (rpc.getTerm() > role.getTerm()) {
@@ -299,7 +264,7 @@ public class NodeImpl implements Node {
                 FollowerNodeRole follower = (FollowerNodeRole) role;
                 NodeId votedFor = follower.getVotedFor();
                 //两种情况,1是自己尚未投票且对方的日志比自己新,2是自己已经给对方投过票
-                if ((votedFor == null &&  !context.log().isNewerThan(rpc.getLastLogIndex(), rpc.getLastLogTerm()))
+                if ((votedFor == null && !context.log().isNewerThan(rpc.getLastLogIndex(), rpc.getLastLogTerm()))
                         || Objects.equals(votedFor, rpc.getCandidateId())) {
                     //投票后需要切换为Follower角色
                     becomeFollower(role.getTerm(), rpc.getCandidateId(), null, true);
@@ -326,8 +291,6 @@ public class NodeImpl implements Node {
 
     //(选举三)candidate分析此次投票请求结果RequestVoteResult并进行下一步操作的具体逻辑
     private void doProcessRequestVoteResult(RequestVoteResult result) {
-
-
         //1.如果对方的term比自己大,说明集群中已存在leader,则将自己切换为Follower;
         //2.如果对方的term比自己小或者对方没有给自己投票,则忽略(因为不可能存在比自己小的term,至少是相等的);
         //3.统计得票数,得票数超过集群节点的一半则切换自己的角色为Leader,否则继续成为Candidate重复选举流程
@@ -351,7 +314,7 @@ public class NodeImpl implements Node {
 
         //当前票数
         int currentVotesCount = ((CandidateNodeRole) role).getVotesCount() + 1;
-//        System.out.println("当前票数"+currentVotesCount);
+
         //节点数
         int countOfMajor = context.group().getCount();
         logger.debug("votes count {}, major node count {}", currentVotesCount, countOfMajor);
@@ -396,25 +359,12 @@ public class NodeImpl implements Node {
     }
 
     private void doReplicateLogFin(GroupMember member, int maxEntries) {
-        AppendEntriesRpc rpc = context.log().createAppendEntriesRpc(role.getTerm(),context.selfId(),member.getNextIndex(),maxEntries);
-        context.connector().sendAppendEntries(rpc,member.getEndpoint());
+        AppendEntriesRpc rpc = context.log().createAppendEntriesRpc(role.getTerm(), context.selfId(), member.getNextIndex(), maxEntries);
+        context.connector().sendAppendEntries(rpc, member.getEndpoint());
 
     }
 
     //除leader外的节点监听到有AppendEntries消息后(由TaskExecutor的实现类异步构造一个日志复制请求的响应)
-//    @Subscribe
-//    public void onReceiveAppendEntriesRpc(AppendEntriesRpcMessage rpcMessage) {
-//        context.taskExecutor().submit(
-//                () -> {
-//                    //回复日志请求Rpc的结果给单个节点(这里应该是leader的Endpoint(id,address))
-//                    context.connector().replyAppendEntries(
-//                            doProcessAppendEntriesRpc(rpcMessage),
-//                            context.findMember(rpcMessage.getSourceNodeId()).getEndpoint()
-//                    );
-//                }
-//        );
-//    }
-
     @Subscribe
     public void onReceiveAppendEntriesRpc(AppendEntriesRpcMessage rpcMessage) {
         context.taskExecutor().submit(() ->
@@ -535,7 +485,7 @@ public class NodeImpl implements Node {
             if (member.advanceReplicatingState(rpc.getLastEntryIndex())) {
                 // getMatchIndexOfMajor是服务器成员用于计算过半commitIndex的方法。
                 context.getLog().advanceCommitIndex(
-                                context.group().getMatchIndexOfMajor(), role.getTerm()
+                        context.group().getMatchIndexOfMajor(), role.getTerm()
                 );
                 System.out.println("3.日志同步成功");
             }
@@ -550,5 +500,32 @@ public class NodeImpl implements Node {
         context.group().resetReplicatingStates(context.log().getNextIndex());
     }
 
+    //包可见,获取核心组件上下文
+    public NodeContext getContext() {
+        return this.context;
+    }
 
+    //包可见,获取当前角色
+    public AbstractNodeRole getRole() {
+        return this.role;
+    }
+
+
+    private static final FutureCallback<Object> LOGGING_FUTURE_CALLBACK = new FutureCallback<Object>() {
+        @Override
+        public void onSuccess(@Nullable Object result) {
+        }
+
+        @Override
+        public void onFailure(@Nonnull Throwable t) {
+            logger.warn("failure", t);
+        }
+    };
+
+    public byte[] getLogByKey(String key) {
+        if (key == null) {
+            throw new LogException("key is null");
+        }
+        return context.log().getLogByKey(key);
+    }
 }

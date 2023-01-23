@@ -14,10 +14,6 @@ public class LeaderNodeRole extends AbstractNodeRole{
         this.logReplicationTask = logReplicationTask;
     }
 
-
-
-
-
     //取消日志复制定时任务
     @Override
     public void cancelTimeoutTask() {

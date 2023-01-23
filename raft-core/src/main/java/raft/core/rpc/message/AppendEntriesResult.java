@@ -9,13 +9,13 @@ package raft.core.rpc.message;
 
 public class AppendEntriesResult {
 
-
-    private final String rpcMessageId;
     //自己当前的任期号
     private final int term;
 
     //是否追加日志成功
     private final boolean success;
+
+    private final String rpcMessageId;
 
     public AppendEntriesResult(String rpcMessageId, int term, boolean success) {
         this.rpcMessageId = rpcMessageId;

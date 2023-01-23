@@ -2,6 +2,7 @@ package raft.core.support;
 
 import com.google.common.base.Preconditions;
 import com.google.common.util.concurrent.FutureCallback;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
@@ -16,11 +17,6 @@ import java.util.concurrent.*;
 public class SingleThreadTaskExecutor implements TaskExecutor{
 
     private final ExecutorService executorService;
-
-    //默认构造器
-    public SingleThreadTaskExecutor() {
-       this(Executors.defaultThreadFactory());
-    }
 
     //构造器,指定名称
     public SingleThreadTaskExecutor(String name) {

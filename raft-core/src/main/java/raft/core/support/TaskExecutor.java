@@ -14,8 +14,6 @@ import java.util.concurrent.Future;
  * @create 2022/9/20 16:16
  **/
 public interface TaskExecutor {
-
-
     //提交任务
     Future<?> submit(Runnable task);
 

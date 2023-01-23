@@ -13,8 +13,6 @@ import java.util.List;
  **/
 public class AppendEntriesRpc {
 
-    private String messageId;
-
     //自己当前的任期号
     private int term;
 
@@ -27,11 +25,25 @@ public class AppendEntriesRpc {
     //前一个日志的任期号
     private  int prevLogTerm;
 
-    //日志条目
+    //复制的日志条目
     private List<Entry>entries = Collections.emptyList();
 
     //leader已提交的日志号
     private int leaderCommit;
+
+    private String messageId;
+
+    public int getLastEntryIndex() {
+        return this.entries.isEmpty() ? this.prevLogIndex : this.entries.get(this.entries.size() - 1).getIndex();
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
 
     public int getTerm() {
         return term;
@@ -81,11 +93,6 @@ public class AppendEntriesRpc {
         this.leaderCommit = leaderCommit;
     }
 
-    public int getLastEntryIndex() {
-        return this.entries.isEmpty() ? this.prevLogIndex : this.entries.get(this.entries.size() - 1).getIndex();
-    }
-
-
     @Override
     public String toString() {
         return "AppendEntriesRpc{" +
@@ -96,14 +103,6 @@ public class AppendEntriesRpc {
                 ", entries=" + entries +
                 ", leaderCommit=" + leaderCommit +
                 '}';
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
     }
 
 }

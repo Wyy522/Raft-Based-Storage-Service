@@ -30,7 +30,6 @@ public class NodeContext {
     //定时器组件
     private Scheduler scheduler;
 
-
     private EventBus eventBus;
 
     //主线程执行器
@@ -41,6 +40,10 @@ public class NodeContext {
 
     //日志
     private Log log;
+
+    public GroupMember findMember(NodeId id){
+        return  group.findMember(id);
+    }
 
     public EventBus eventBus() {
         return eventBus;
@@ -62,13 +65,7 @@ public class NodeContext {
         return group;
     }
 
-    public TaskExecutor taskExecutor(){
-        return taskExecutor;
-    }
-    public GroupMember findMember(NodeId id){
-        return  group.findMember(id);
-    }
-
+    public TaskExecutor taskExecutor(){ return taskExecutor;}
 
     public NodeId selfId() {
         return selfId;
@@ -78,7 +75,6 @@ public class NodeContext {
         return selfId;
     }
 
-    //设置自己的节点ID
     public void setSelfId(NodeId selfId) {
         this.selfId = selfId;
     }
