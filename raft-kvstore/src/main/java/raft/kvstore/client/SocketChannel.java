@@ -29,7 +29,7 @@ public class SocketChannel implements Channel {
     public Object send(Object payload) {
         try (Socket socket = new Socket()) {
             socket.setTcpNoDelay(true);
-            //kv client 连接 kv server
+            //kv client 连接 kv server   localhost,3333
             System.out.println("socket channel host :"+this.host+" , port : "+this.port);
             socket.connect(new InetSocketAddress(this.host, this.port));
             this.write(socket.getOutputStream(), payload);

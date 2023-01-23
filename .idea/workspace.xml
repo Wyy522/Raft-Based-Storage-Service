@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/base/ReplicatingState.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/base/ReplicatingState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/Console.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/Console.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/SocketChannel.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/SocketChannel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServerLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServerLauncher.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -292,7 +298,9 @@
       <workItem from="1673936776456" duration="638000" />
       <workItem from="1674054616241" duration="748000" />
       <workItem from="1674111035767" duration="3000" />
-      <workItem from="1674193116141" duration="2497000" />
+      <workItem from="1674193116141" duration="3065000" />
+      <workItem from="1674234876965" duration="675000" />
+      <workItem from="1674471351816" duration="11470000" />
     </task>
     <servers />
   </component>

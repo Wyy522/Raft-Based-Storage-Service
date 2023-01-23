@@ -27,6 +27,7 @@ public class Server {
     }
 
     public void start() throws Exception {
+        //启动core节点服务
         this.node.start();
         ServerBootstrap serverBootstrap = new ServerBootstrap()
                 .group(bossGroup, workerGroup)

@@ -22,8 +22,7 @@ public class Console {
     private final Map<String, Command> commandMap;
     private final CommandContext commandContext;
     private final LineReader reader;
-
-    public Console(Map<NodeId, Address> serverMap) {
+    {
         commandMap = buildCommandMap(Arrays.asList(
                 new ExitCommand(),
                 new ClientAddServerCommand(),
@@ -36,8 +35,6 @@ public class Console {
                 new KVStoreGetCommand(),
                 new KVStoreSetCommand()
         ));
-        commandContext = new CommandContext(serverMap);
-
         ArgumentCompleter completer = new ArgumentCompleter(
                 new StringsCompleter(commandMap.keySet()),
                 new NullCompleter()
@@ -45,6 +42,10 @@ public class Console {
         reader = LineReaderBuilder.builder()
                 .completer(completer)
                 .build();
+    }
+
+    public Console(Map<NodeId, Address> serverMap) {
+        commandContext = new CommandContext(serverMap);
     }
 
     private Map<String, Command> buildCommandMap(Collection<Command> commands) {
@@ -65,6 +66,7 @@ public class Console {
                 if (line.trim().isEmpty()){
                     continue;
                 }
+                //接收到行命令，分解
                 dispatchCommand(line);
             } catch (IllegalArgumentException e) {
                 System.err.println(e.getMessage());
@@ -84,6 +86,7 @@ public class Console {
         System.out.println("***********************************************");
     }
 
+    //差分命令
     private void dispatchCommand(String line) {
         String[] commandNameAndArguments = line.split("\\s+", 2);
         String commandName = commandNameAndArguments[0];
@@ -91,6 +94,7 @@ public class Console {
         if (command == null) {
             throw new IllegalArgumentException("no such command [" + commandName + "]");
         }
+        //执行
         command.execute(commandNameAndArguments.length > 1 ? commandNameAndArguments[1] : "", commandContext);
     }
 }

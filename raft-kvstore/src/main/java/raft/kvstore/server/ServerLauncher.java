@@ -27,6 +27,7 @@ public class ServerLauncher {
     private void execute(String[] args) throws Exception {
         Options options = new Options();
         //模式
+        {
         options.addOption(Option.builder("m")
                 .hasArg()
                 .argName("mode")
@@ -77,6 +78,7 @@ public class ServerLauncher {
                 .desc("group config, required when starts with group-member mode. format: <node-endpoint> <node-endpoint>..., " +
                         "format of node-endpoint: <node-id>,<host>,<port-raft-node>, eg: A,localhost,8000 B,localhost,8010")
                 .build());
+        }
 
         if (args.length == 0) {
             HelpFormatter formatter = new HelpFormatter();
@@ -96,6 +98,7 @@ public class ServerLauncher {
                     startAsStandaloneOrStandby(cmdLine, false);
                     break;
                 case MODE_GROUP_MEMBER:
+                    //集群启动
                     startAsGroupMember(cmdLine);
                     break;
                 default:
@@ -133,16 +136,21 @@ public class ServerLauncher {
         }
 
         String[] rawGroupConfig = cmdLine.getOptionValues("gc");
+        //服务节点名称 A
         String rawNodeId = cmdLine.getOptionValue('i');
+        //对外服务端口 3333
         int portService = ((Long) cmdLine.getParsedOptionValue("p2")).intValue();
 
+        //解析集群成员 A,localhost,2333 B,localhost,2334 C,localhost,2335
         Set<NodeEndpoint> nodeEndpoints = Stream.of(rawGroupConfig)
                 .map(this::parseNodeEndpoint)
                 .collect(Collectors.toSet());
 
+        //解析完成后 创建core节点相关信息(连接器、日志、选举等等)
         Node node = new NodeBuilder(nodeEndpoints, new NodeId(rawNodeId))
                 .setDataDir(cmdLine.getOptionValue('d'))
                 .build();
+        //创建对外Server服务
         Server server = new Server(node, portService);
         logger.info("start as group member, group config {}, id {}, port service {}", nodeEndpoints, rawNodeId, portService);
         startServer(server);

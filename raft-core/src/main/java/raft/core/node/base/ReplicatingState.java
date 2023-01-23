@@ -6,7 +6,11 @@ package raft.core.node.base;
  * @create 2022/9/19 20:42
  **/
 public class ReplicatingState {
+
+    //下一条需要复制的日志索引
     private int nextIndex;
+
+    //已匹配日志的索引
     private int matchIndex;
 
     ReplicatingState(int nextIndex) {

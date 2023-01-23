@@ -109,7 +109,6 @@ public class NodeBuilder {
         context.setScheduler(scheduler != null ? scheduler : new DefaultScheduler(3000, 4000, 0, 1000));
         context.setConnector(connector != null ? connector : createNioConnector());
         context.setTaskExecutor(taskExecutor != null ? taskExecutor : new SingleThreadTaskExecutor("node"));
-
         return context;
     }
 
