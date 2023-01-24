@@ -110,9 +110,9 @@ abstract class AbstractLog implements Log {
 
         //检查前一条日志是否匹配
         //先检查从leader节点过来的prevLogIndex和prevLogTerm是否匹配本地日志，如果不匹配则返回false，则追加失败
-//        if (!checkIfPreviousLogMatches(prevLogIndex, prevLogTerm)) {
-//            return false;
-//        }
+        if (!checkIfPreviousLogMatches(prevLogIndex, prevLogTerm)) {
+            return false;
+        }
 
         //Leader节点传递过来的日志条目为空
         if (leaderEntries.isEmpty()) {
@@ -288,7 +288,6 @@ abstract class AbstractLog implements Log {
             if (!entries.isEmpty()) {
                 firstLogIndex = entries.get(0).getIndex();
                 lastLogIndex = entries.get(entries.size() - 1).getIndex();
-
             }
         }
 
@@ -319,11 +318,8 @@ abstract class AbstractLog implements Log {
             if (entries.isEmpty() || fromIndex > lastLogIndex) {
                 return new EntrySequenceView(Collections.emptyList());
             }
-            return new EntrySequenceView(
-
-                    //截取子数组(可用日志)
-                    entries.subList(fromIndex - firstLogIndex, entries.size())
-            );
+            //截取子数组(可用日志)
+            return new EntrySequenceView(entries.subList(fromIndex - firstLogIndex, entries.size()));
         }
 
         @Override

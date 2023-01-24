@@ -1,7 +1,7 @@
 package raft.kvstore.client;
 
 import raft.core.node.base.NodeId;
-import raft.core.rpc.Address;
+import raft.core.node.base.Address;
 import raft.core.service.ServerRouter;
 
 import java.util.Map;
@@ -30,6 +30,7 @@ public class CommandContext {
         ServerRouter router = new ServerRouter();
         for (NodeId nodeId : serverMap.keySet()) {
             Address address = serverMap.get(nodeId);
+            //构建服务器路由表,路由表实际上是根据Host和port创建了一个连接管道
             router.add(nodeId, new SocketChannel(address.getHost(), address.getPort()));
         }
         return router;

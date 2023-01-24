@@ -4,7 +4,7 @@ import com.google.common.eventbus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import raft.core.log.sequence.EntrySequence;
-import raft.core.log.sequence.memory.MemoryEntrySequence;
+import raft.core.log.sequence.MemoryEntrySequence;
 
 public class MemoryLog extends AbstractLog{
 

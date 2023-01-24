@@ -1,4 +1,4 @@
-package raft.core.log.sequence.memory;
+package raft.core.log.sequence;
 
 import raft.core.log.command.SetCommand;
 import raft.core.log.entry.Entry;
@@ -25,7 +25,7 @@ public class MemoryEntrySequence extends AbstractEntrySequence {
 
     //构造器,日志索引偏移为1
     public MemoryEntrySequence() {
-        super(1);
+        this(1);
     }
 
     //构造器,指定日志索引偏移
@@ -56,7 +56,6 @@ public class MemoryEntrySequence extends AbstractEntrySequence {
         System.out.println("test map key :"+setCommand.getKey()+", value :"+ Arrays.toString(entry.getCommandBytes()));
         test.put(setCommand.getKey(),setCommand.getValue());
         entries.add(entry);
-
     }
 
     //提交索引

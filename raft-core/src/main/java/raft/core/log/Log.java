@@ -20,20 +20,11 @@ public interface Log {
 
     int ALL_ENTRIES = -1;
 
-    //获取最后一条日志的元信息
+    //获取最后一条日志的元信息(term,index)
     EntryMeta getLastEntryMeta();
 
     //创建AppendEntries消息
     AppendEntriesRpc createAppendEntriesRpc(int term, NodeId selfId, int nextIndex, int maxEntries);
-
-    //获取下一条日志的索引
-    int getNextIndex();
-
-    //获取当前已提交的日志索引
-    int getCommitIndex();
-
-    //判断LastLogIndex和LastLogTerm是否比自己新
-    boolean isNewerThan(int lastLogIndex, int lastLogTerm);
 
     //增加一个NO-OP日志
     NoOpEntry appendEntry(int term);
@@ -44,8 +35,17 @@ public interface Log {
     //追加来自Leader的日志
     boolean appendEntriesFromLeader(int prevLogIndex, int prevLogTerm, List<Entry> entries);
 
-    //推进一条的日志索引
+    //推进已提交的日志索引
     void advanceCommitIndex(int newCommitIndex, int currentTerm);
+
+    //获取下一条日志的索引
+    int getNextIndex();
+
+    //获取当前已提交的日志索引
+    int getCommitIndex();
+
+    //判断LastLogIndex和LastLogTerm是否比自己新
+    boolean isNewerThan(int lastLogIndex, int lastLogTerm);
 
     void setStateMachine(StateMachine stateMachine);
 

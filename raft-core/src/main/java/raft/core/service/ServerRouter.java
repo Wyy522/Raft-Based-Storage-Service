@@ -23,6 +23,7 @@ import java.util.*;
 public class ServerRouter {
     private static final Logger logger = LoggerFactory.getLogger(ServerRouter.class);
 
+    //当前系统活跃的服务器ID和其连接管道
     private final Map<NodeId, Channel> availableServers =new HashMap<>();
 
     private NodeId leaderId;
@@ -49,13 +50,22 @@ public class ServerRouter {
         throw new NoAvailableServerException("no available server");
     }
 
+    private Object doSend(NodeId id, Object payload) {
+        //拿到对应的连接管道(localhost,port)
+        Channel channel = this.availableServers.get(id);
+        if (channel == null) {
+            throw new IllegalStateException("no such channel to server " + id);
+        }
+        System.out.println("log: 该请求已发送给节点 :"+id);
+        return channel.send(payload);
+    }
+
     //获取候选节点id列表
     private Collection<NodeId> getCandidateNodeIds(){
         //候选为空
         if (availableServers.isEmpty()){
             throw  new NoAvailableServerException("no available server");
         }
-
         //已设置
         if (leaderId!=null){
             List<NodeId> nodeIds = new ArrayList<>();
@@ -68,33 +78,8 @@ public class ServerRouter {
             }
             return nodeIds;
         }
-
         //没有设置的话,任意返回
         return availableServers.keySet();
-    }
-
-    private Object doSend(NodeId id, Object payload) {
-        Channel channel = this.availableServers.get(id);
-        if (channel == null) {
-            throw new IllegalStateException("no such channel to server " + id);
-        }
-//        logger.debug("send request to server {}", id);
-        System.out.println("log: 该请求已发送给节点 :"+id);
-
-        //        if (send ==null) {
-//            throw new IllegalStateException("send to node :" + id+",receive is null ");
-//        }
-//        System.out.println("log: 当前请求类型为 :"+type);
-//        if (type.equals("set")){
-//            for (NodeId nodeId : availableServers.keySet()) {
-//                if (nodeId==leaderId){
-//                    continue;
-//                }
-//                Channel otherChannel = availableServers.get(nodeId);
-//                otherChannel.send(payload);
-//            }
-//        }
-        return channel.send(payload);
     }
 
     public void add(NodeId id, Channel channel) {

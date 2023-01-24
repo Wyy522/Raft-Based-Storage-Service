@@ -90,9 +90,6 @@ public abstract class AbstractEntrySequence implements EntrySequence {
         return doGetEntry(doGetLastLogIndex());
     }
 
-    //获取指定索引的日志条目(有不同的存储方式,交给子类实现)
-    protected abstract Entry doGetEntry(int index);
-
     //获取序列的子视图，到最后一条日志
     public List<Entry> subList(int fromIndex) {
         if (isEmpty() || fromIndex > doGetLastLogIndex()) {
@@ -116,8 +113,12 @@ public abstract class AbstractEntrySequence implements EntrySequence {
         return doSubList(fromIndex, toIndex);
     }
 
-    //获取序列的子视图，到toIndex的闭区间(有不同的存储方式,交给子类实现)
-    protected abstract List<Entry> doSubList(int fromIndex, int toIndex);
+    //追加多条日志
+    public void append(List<Entry> entries) {
+        for (Entry entry : entries) {
+            append(entry);
+        }
+    }
 
     //追加单条日志
     public void append(Entry entry) {
@@ -131,16 +132,6 @@ public abstract class AbstractEntrySequence implements EntrySequence {
         nextLogIndex++;
     }
 
-    //追加多条日志
-    public void append(List<Entry> entries) {
-        for (Entry entry : entries) {
-            append(entry);
-        }
-    }
-
-    //具体添加日志由子类实现
-    protected abstract void doAppend(Entry entry);
-
     //移出指定索引后的日志条目
     public void removeAfter(int index) {
         if (isEmpty() || index >= getLastLogIndex()) {
@@ -148,6 +139,15 @@ public abstract class AbstractEntrySequence implements EntrySequence {
         }
         doRemoveAfter(index);
     }
+
+    //获取指定索引的日志条目(有不同的存储方式,交给子类实现)
+    protected abstract Entry doGetEntry(int index);
+
+    //获取序列的子视图，到toIndex的闭区间(有不同的存储方式,交给子类实现)
+    protected abstract List<Entry> doSubList(int fromIndex, int toIndex);
+
+    //具体添加日志由子类实现
+    protected abstract void doAppend(Entry entry);
 
     //移出指定索引后的日志条目(有不同的存储方式,交给子类实现)
     protected abstract void doRemoveAfter(int index);

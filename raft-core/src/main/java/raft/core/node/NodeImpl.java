@@ -55,19 +55,14 @@ public class NodeImpl implements Node {
         if (started) {
             return;
         }
-
         //注册自己到EventBus
         context.eventBus().register(this);
-
         //初始化连接器
         context.connector().initialize();
-
         //启动时为Follower角色
         NodeStore store = context.store();
-
         //统一角色转换(节点初次启动设置Follower相关参数)
         changeToRole(new FollowerNodeRole(store.getTerm(), store.getVotedFor(), null, scheduleElectionTimeout()));
-
         //设置节点状态为启动
         started = true;
     }
@@ -97,19 +92,14 @@ public class NodeImpl implements Node {
         if (!started) {
             throw new IllegalStateException("node not started");
         }
-
         //关闭定时器
         context.scheduler().stop();
-
         //关闭连接器
         context.connector().close();
-
         //关闭执行器
         context.taskExecutor().shutdown();
-
         //设置节点状态为关闭
         started = false;
-
     }
 
     @Override
@@ -128,7 +118,6 @@ public class NodeImpl implements Node {
             context.log().appendEntry(role.getTerm(), commandBytes);
             //leader转发给其他节点进行日志存储
             doReplicateLog();
-
         }, LOGGING_FUTURE_CALLBACK);
     }
 
@@ -149,7 +138,6 @@ public class NodeImpl implements Node {
 
     //特殊的角色切换方法,有一个是否设置选举超时参数
     private void becomeFollower(int term, NodeId votedFor, NodeId leaderId, boolean scheduleElectionTimeout) {
-
         //取消定时任务
         role.cancelTimeoutTask();
 
@@ -177,7 +165,6 @@ public class NodeImpl implements Node {
 
     //(选举一)选举实现的具体逻辑
     private void doProcessElectionTimeout() {
-
         //第一个超时的follower会首先调用该方法,执行选举流程
         //1.给自己的任期号+1,票数+1(自己给自己投的)
         //2.切换角色为candidate

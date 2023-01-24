@@ -9,8 +9,6 @@ import java.util.Arrays;
 public class Client {
     //版本
     public static final String VERSION = "0.1.0";
-    public static final String SetType = "set";
-    public static final String GetType = "get";
     //服务期路由器
     private final ServerRouter serverRouter;
 

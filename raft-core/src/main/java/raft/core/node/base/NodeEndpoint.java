@@ -2,7 +2,6 @@ package raft.core.node.base;
 
 
 import com.google.common.base.Preconditions;
-import raft.core.rpc.Address;
 
 /**
  * 节点服务期id,ip和端口类

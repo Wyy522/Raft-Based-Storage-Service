@@ -8,7 +8,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import raft.core.node.base.NodeId;
-import raft.core.rpc.Address;
+import raft.core.node.base.Address;
 import raft.core.rpc.exception.ChannelConnectException;
 
 import java.net.ConnectException;

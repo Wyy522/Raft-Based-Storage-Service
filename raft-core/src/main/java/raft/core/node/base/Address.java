@@ -1,4 +1,4 @@
-package raft.core.rpc;
+package raft.core.node.base;
 
 /**
  * ip地址及端口号类

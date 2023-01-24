@@ -8,7 +8,7 @@ import org.jline.reader.impl.completer.ArgumentCompleter;
 import org.jline.reader.impl.completer.NullCompleter;
 import org.jline.reader.impl.completer.StringsCompleter;
 import raft.core.node.base.NodeId;
-import raft.core.rpc.Address;
+import raft.core.node.base.Address;
 import raft.kvstore.client.command.*;
 
 import java.util.Arrays;
@@ -30,8 +30,6 @@ public class Console {
                 new ClientListServerCommand(),
                 new ClientGetLeaderCommand(),
                 new ClientSetLeaderCommand(),
-                new RaftAddNodeCommand(),
-                new RaftRemoveNodeCommand(),
                 new KVStoreGetCommand(),
                 new KVStoreSetCommand()
         ));
@@ -44,10 +42,6 @@ public class Console {
                 .build();
     }
 
-    public Console(Map<NodeId, Address> serverMap) {
-        commandContext = new CommandContext(serverMap);
-    }
-
     private Map<String, Command> buildCommandMap(Collection<Command> commands) {
         Map<String, Command> commandMap = new HashMap<>();
         for (Command cmd : commands) {
@@ -56,6 +50,19 @@ public class Console {
         return commandMap;
     }
 
+    public Console(Map<NodeId, Address> serverMap) {
+        commandContext = new CommandContext(serverMap);
+    }
+
+    private void showInfo() {
+        System.out.println("Welcome to XRaft KVStore Shell\n");
+        System.out.println("***********************************************");
+        System.out.println("current server list: \n");
+        commandContext.printSeverList();
+        System.out.println("***********************************************");
+    }
+
+    //一直循环，监听到命令行有输入就解析
     void start() {
         commandContext.setRunning(true);
         showInfo();
@@ -78,19 +85,11 @@ public class Console {
         }
     }
 
-    private void showInfo() {
-        System.out.println("Welcome to XRaft KVStore Shell\n");
-        System.out.println("***********************************************");
-        System.out.println("current server list: \n");
-        commandContext.printSeverList();
-        System.out.println("***********************************************");
-    }
-
     //差分命令
     private void dispatchCommand(String line) {
-        String[] commandNameAndArguments = line.split("\\s+", 2);
-        String commandName = commandNameAndArguments[0];
-        Command command = commandMap.get(commandName);
+        String[] commandNameAndArguments = line.split("\\s+", 2); //kvstore-get x
+        String commandName = commandNameAndArguments[0];//kvstore-get
+        Command command = commandMap.get(commandName);//KVStoreSetCommand()
         if (command == null) {
             throw new IllegalArgumentException("no such command [" + commandName + "]");
         }

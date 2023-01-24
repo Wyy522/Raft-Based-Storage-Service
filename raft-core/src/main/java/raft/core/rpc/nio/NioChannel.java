@@ -35,8 +35,6 @@ public class NioChannel implements Channel {
         nettyChannel.writeAndFlush(result);
     }
 
-
-
     @Override
     public void close() {
         try {
