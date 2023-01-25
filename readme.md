@@ -115,8 +115,6 @@ private void write(OutputStream output, int messageType, MessageLite message) th
 
 ![](.\readme-pitcher\raft-kvservice的流程.png)
 
-
-
 ### （二）核心模块(raft-core)
 
 
