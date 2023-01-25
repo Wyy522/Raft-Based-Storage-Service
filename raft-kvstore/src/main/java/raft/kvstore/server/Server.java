@@ -36,11 +36,12 @@ public class Server {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new Encoder());
-                        pipeline.addLast(new Decoder());
+                        pipeline.addLast(new Decoder());//解析请求
+                        pipeline.addLast(new Encoder());//封装响应
                         pipeline.addLast(new ServiceHandler(service));
                     }
                 });
+        //port : 3333
         logger.info("server started at port {}", this.port);
         serverBootstrap.bind(this.port);
     }

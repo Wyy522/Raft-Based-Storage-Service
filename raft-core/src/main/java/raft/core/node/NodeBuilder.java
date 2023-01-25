@@ -107,17 +107,19 @@ public class NodeBuilder {
         context.setSelfId(selfId);
         context.setEventBus(eventBus);
         context.setScheduler(scheduler != null ? scheduler : new DefaultScheduler(3000, 4000, 0, 1000));
-        context.setConnector(connector != null ? connector : createNioConnector());
         context.setTaskExecutor(taskExecutor != null ? taskExecutor : new SingleThreadTaskExecutor("node"));
+        context.setConnector(connector != null ? connector : createNioConnector());
         return context;
     }
 
     private NioConnector createNioConnector() {
+        //port是核心端口：2333
         int port = group.findSelf().getEndpoint().getPort();
         if (workerNioEventLoopGroup != null) {
-            return new NioConnector(workerNioEventLoopGroup, selfId, eventBus, port, 1000);
+            return new NioConnector(workerNioEventLoopGroup,selfId, eventBus, port, 1000);
         }
-        return new NioConnector(new NioEventLoopGroup(10), false, selfId, eventBus, port, 1000);
+        //初始化连接器信息，包括工作线程为10，工作线程不共享，当前连接器的对应节点的ID，eventBUS,服务端口，日志复制间隔
+        return new NioConnector(new NioEventLoopGroup(10), selfId, eventBus, port, 1000);
     }
 
     /**

@@ -85,49 +85,21 @@ public class ServerLauncher {
             formatter.printHelp("raft-kvstore [OPTION]...", options);
             return;
         }
-
+        //解析命令行参数
         CommandLineParser parser = new DefaultParser();
         try {
             CommandLine cmdLine = parser.parse(options, args);
+            //group-member
             String mode = cmdLine.getOptionValue('m', MODE_STANDALONE);
-            switch (mode) {
-                case MODE_STANDBY:
-                    startAsStandaloneOrStandby(cmdLine, true);
-                    break;
-                case MODE_STANDALONE:
-                    startAsStandaloneOrStandby(cmdLine, false);
-                    break;
-                case MODE_GROUP_MEMBER:
-                    //集群启动
-                    startAsGroupMember(cmdLine);
-                    break;
-                default:
-                    throw new IllegalArgumentException("illegal mode [" + mode + "]");
+            //集群启动
+            if (MODE_GROUP_MEMBER.equals(mode)) {
+                startAsGroupMember(cmdLine);
+            } else {
+                throw new IllegalArgumentException("illegal mode [" + mode + "]");
             }
         } catch (ParseException | IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
-    }
-
-    private void startAsStandaloneOrStandby(CommandLine cmdLine, boolean standby) throws Exception {
-        if (!cmdLine.hasOption("p1") || !cmdLine.hasOption("p2")) {
-            throw new IllegalArgumentException("port-raft-node or port-service required");
-        }
-
-        String id = cmdLine.getOptionValue('i');
-        String host = cmdLine.getOptionValue('h', "localhost");
-        int portRaftServer = ((Long) cmdLine.getParsedOptionValue("p1")).intValue();
-        int portService = ((Long) cmdLine.getParsedOptionValue("p2")).intValue();
-
-        NodeEndpoint nodeEndpoint = new NodeEndpoint(id, host, portRaftServer);
-        Node node = new NodeBuilder(nodeEndpoint)
-                .setStandby(standby)
-                .setDataDir(cmdLine.getOptionValue('d'))
-                .build();
-        Server server = new Server(node, portService);
-        logger.info("start with mode {}, id {}, host {}, port raft node {}, port service {}",
-                (standby ? "standby" : "standalone"), id, host, portRaftServer, portService);
-        startServer(server);
     }
 
     private void startAsGroupMember(CommandLine cmdLine) throws Exception {
@@ -135,13 +107,10 @@ public class ServerLauncher {
             throw new IllegalArgumentException("group-config required");
         }
 
-        String[] rawGroupConfig = cmdLine.getOptionValues("gc");
-        //服务节点名称 A
-        String rawNodeId = cmdLine.getOptionValue('i');
-        //对外服务端口 3333
-        int portService = ((Long) cmdLine.getParsedOptionValue("p2")).intValue();
+        String rawNodeId = cmdLine.getOptionValue('i');//服务节点名称 A
+        int portService = ((Long) cmdLine.getParsedOptionValue("p2")).intValue();  //对外服务端口 3333
 
-        //解析集群成员 A,localhost,2333 B,localhost,2334 C,localhost,2335
+        String[] rawGroupConfig = cmdLine.getOptionValues("gc");//解析集群成员 A,localhost,2333 B,localhost,2334 C,localhost,2335
         Set<NodeEndpoint> nodeEndpoints = Stream.of(rawGroupConfig)
                 .map(this::parseNodeEndpoint)
                 .collect(Collectors.toSet());
@@ -149,7 +118,7 @@ public class ServerLauncher {
         //解析完成后 创建core节点相关信息(连接器、日志、选举等等)
         Node node = new NodeBuilder(nodeEndpoints, new NodeId(rawNodeId))
                 .setDataDir(cmdLine.getOptionValue('d'))
-                .build();
+                .build();//第一个节点内部Netty服务器初始化等操作
         //创建对外Server服务
         Server server = new Server(node, portService);
         logger.info("start as group member, group config {}, id {}, port service {}", nodeEndpoints, rawNodeId, portService);
@@ -192,3 +161,38 @@ public class ServerLauncher {
     }
 
 }
+
+//          switch (mode) {
+//                case MODE_STANDBY:
+//                    startAsStandaloneOrStandby(cmdLine, true);
+//                    break;
+//                case MODE_STANDALONE:
+//                    startAsStandaloneOrStandby(cmdLine, false);
+//                    break;
+//                case MODE_GROUP_MEMBER:
+//                    //集群启动
+//                    startAsGroupMember(cmdLine);
+//                    break;
+//                default:
+//                    throw new IllegalArgumentException("illegal mode [" + mode + "]");
+//            }
+//    private void startAsStandaloneOrStandby(CommandLine cmdLine, boolean standby) throws Exception {
+//        if (!cmdLine.hasOption("p1") || !cmdLine.hasOption("p2")) {
+//            throw new IllegalArgumentException("port-raft-node or port-service required");
+//        }
+//
+//        String id = cmdLine.getOptionValue('i');
+//        String host = cmdLine.getOptionValue('h', "localhost");
+//        int portRaftServer = ((Long) cmdLine.getParsedOptionValue("p1")).intValue();
+//        int portService = ((Long) cmdLine.getParsedOptionValue("p2")).intValue();
+//
+//        NodeEndpoint nodeEndpoint = new NodeEndpoint(id, host, portRaftServer);
+//        Node node = new NodeBuilder(nodeEndpoint)
+//                .setStandby(standby)
+//                .setDataDir(cmdLine.getOptionValue('d'))
+//                .build();
+//        Server server = new Server(node, portService);
+//        logger.info("start with mode {}, id {}, host {}, port raft node {}, port service {}",
+//                (standby ? "standby" : "standalone"), id, host, portRaftServer, portService);
+//        startServer(server);
+//    }

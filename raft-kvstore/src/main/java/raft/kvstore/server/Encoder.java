@@ -63,7 +63,7 @@ public class Encoder extends MessageToByteEncoder<Object> {
         }
     }
 
-    // 写数据
+    // 封装响应数据
     private void writeMessage(int messageType, MessageLite message, ByteBuf out) throws IOException {
         out.writeInt(messageType);
         byte[] bytes = message.toByteArray();

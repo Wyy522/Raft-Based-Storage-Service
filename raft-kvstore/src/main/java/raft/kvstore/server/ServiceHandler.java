@@ -23,12 +23,9 @@ public class ServiceHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //分发命令
         if (msg instanceof GetCommand) {
-            service.get(new CommandRequest<>((GetCommand) msg, ctx.channel())
-            );
+            service.get(new CommandRequest<>((GetCommand) msg, ctx.channel()));
         } else if (msg instanceof SetCommand) {
-//            System.out.println("Set Command  k: "+((SetCommand) msg).getKey()+"v:"+ Arrays.toString(((SetCommand) msg).getValue()));
-            service.set(new CommandRequest<>((SetCommand) msg, ctx.channel())
-            );
+            service.set(new CommandRequest<>((SetCommand) msg, ctx.channel()));
         }
     }
 

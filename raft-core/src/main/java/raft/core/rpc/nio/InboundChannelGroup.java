@@ -17,10 +17,9 @@ public class InboundChannelGroup {
     //增加入口连接
     public void add(NodeId remoteId,NioChannel channel){
         logger.debug("channel INBOUND-{} connected",remoteId);
-      channel.getDelegate().closeFuture().addListener((ChannelFutureListener) future -> {
-            // 连接关闭时移除
+        channel.getDelegate().closeFuture().addListener((ChannelFutureListener) future -> {
             logger.debug("channel INBOUND-{} disconnected", remoteId);
-            remove(channel);
+            remove(channel);// 连接关闭时移除
         });
     }
 

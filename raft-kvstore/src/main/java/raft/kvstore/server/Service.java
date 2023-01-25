@@ -31,25 +31,16 @@ public class Service {
 
     public void set(CommandRequest<SetCommand> commandRequest){
         // 如果当前节点不是leader节点那么就返回redirect
-
-        //重定向
-        Redirect redirect = checkLeadership();
+        Redirect redirect = checkLeadership(); //重定向
         if (redirect != null){
             commandRequest.reply(redirect);
         }
         SetCommand command = commandRequest.getCommand();
-//        String value =new String(command.getValue());
         logger.debug("set key :{} , value : {}",command.getKey(),command.getValue());
-        // 记录请求ID和CommandRequest的映射
-        this.pendingCommands.put(command.getRequestId(),commandRequest);
-        // 客户端连接关闭时从映射中移除
-        commandRequest.addCloseListener(()->pendingCommands.remove(command.getRequestId()));
-        // 追加日志
-        this.node.appendLog(command.toBytes());
-
-        //返回客户端
-        commandRequest.reply(new SetCommand(command.getKey(), command.getValue()));
-
+        commandRequest.addCloseListener(()->pendingCommands.remove(command.getRequestId()));// 客户端连接关闭时从映射中移除
+        this.pendingCommands.put(command.getRequestId(),commandRequest);// 记录请求ID和CommandRequest的映射
+        this.node.appendLog(command.toBytes());// 追加日志
+        commandRequest.reply(new SetCommand(command.getKey(), command.getValue()));  //返回客户端
     }
 
     public void get(CommandRequest<GetCommand> commandRequest) {

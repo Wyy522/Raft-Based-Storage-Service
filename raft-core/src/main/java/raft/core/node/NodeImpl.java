@@ -71,70 +71,16 @@ public class NodeImpl implements Node {
     private void changeToRole(AbstractNodeRole newRole) {
         //打印日志
         logger.debug("node {},role state changed ->{}", context.getSelfId(), newRole);
-
         //获取上下文环境中节点的状态信息
         NodeStore store = context.store();
-
         //将上下文环境中节点状态信息中的任期号持久化
         store.setTerm(newRole.getTerm());
-
         //如果是Follower,则将上下文环境中的投票信息持久化
         if (newRole.getName() == RoleName.FOLLOWER) {
             store.setVotedFor(((FollowerNodeRole) newRole).getVotedFor());
         }
-
         role = newRole;
-
     }
-
-    @Override
-    public void stop() throws InterruptedException {
-        if (!started) {
-            throw new IllegalStateException("node not started");
-        }
-        //关闭定时器
-        context.scheduler().stop();
-        //关闭连接器
-        context.connector().close();
-        //关闭执行器
-        context.taskExecutor().shutdown();
-        //设置节点状态为关闭
-        started = false;
-    }
-
-    @Override
-    public void registerStateMachine(StateMachine stateMachine) {
-        Preconditions.checkNotNull(stateMachine);
-        System.out.println("StateMachine 已注入");
-        context.log().setStateMachine(stateMachine);
-    }
-
-    @Override
-    public void appendLog(byte[] commandBytes) {
-        Preconditions.checkNotNull(commandBytes);
-        ensureLeader();
-        context.taskExecutor().submit(() -> {
-            //leader 进行日志存储
-            context.log().appendEntry(role.getTerm(), commandBytes);
-            //leader转发给其他节点进行日志存储
-            doReplicateLog();
-        }, LOGGING_FUTURE_CALLBACK);
-    }
-
-    private void ensureLeader() {
-        RoleNameAndLeaderId result = role.getNameAndLeaderId(context.selfId());
-        if (result.getRoleName() == RoleName.LEADER) {
-            return;
-        }
-        NodeEndpoint endpoint = result.getLeaderId() != null ? context.group().findMember(result.getLeaderId()).getEndpoint() : null;
-        throw new NotLeaderException(result.getRoleName(), endpoint);
-    }
-
-    @Override
-    public RoleNameAndLeaderId getRoleNameAndLeaderId() {
-        return role.getNameAndLeaderId(context.selfId());
-    }
-
 
     //特殊的角色切换方法,有一个是否设置选举超时参数
     private void becomeFollower(int term, NodeId votedFor, NodeId leaderId, boolean scheduleElectionTimeout) {
@@ -515,4 +461,54 @@ public class NodeImpl implements Node {
         }
         return context.log().getLogByKey(key);
     }
+
+    @Override
+    public void stop() throws InterruptedException {
+        if (!started) {
+            throw new IllegalStateException("node not started");
+        }
+        //关闭定时器
+        context.scheduler().stop();
+        //关闭连接器
+        context.connector().close();
+        //关闭执行器
+        context.taskExecutor().shutdown();
+        //设置节点状态为关闭
+        started = false;
+    }
+
+    @Override
+    public void registerStateMachine(StateMachine stateMachine) {
+        Preconditions.checkNotNull(stateMachine);
+        System.out.println("StateMachine 已注入");
+        context.log().setStateMachine(stateMachine);
+    }
+
+    @Override
+    public void appendLog(byte[] commandBytes) {
+        Preconditions.checkNotNull(commandBytes);
+        ensureLeader();
+        context.taskExecutor().submit(() -> {
+            //leader 进行日志存储
+            context.log().appendEntry(role.getTerm(), commandBytes);
+            //leader转发给其他节点进行日志存储
+            doReplicateLog();
+        }, LOGGING_FUTURE_CALLBACK);
+    }
+
+    private void ensureLeader() {
+        RoleNameAndLeaderId result = role.getNameAndLeaderId(context.selfId());
+        if (result.getRoleName() == RoleName.LEADER) {
+            return;
+        }
+        NodeEndpoint endpoint = result.getLeaderId() != null ? context.group().findMember(result.getLeaderId()).getEndpoint() : null;
+        throw new NotLeaderException(result.getRoleName(), endpoint);
+    }
+
+    @Override
+    public RoleNameAndLeaderId getRoleNameAndLeaderId() {
+        return role.getNameAndLeaderId(context.selfId());
+    }
+
+
 }

@@ -28,8 +28,6 @@ public class NioConnector implements Connector {
     private static final Logger logger = LoggerFactory.getLogger(NioConnector.class);
     private final NioEventLoopGroup bossNioEventLoopGroup = new NioEventLoopGroup(1);
     private final NioEventLoopGroup workerNioEventLoopGroup;
-    // 是否和上层服务等共享IO线程池
-    private final boolean workerGroupShared;
     // 解决核心组件和通信组件之间双向依赖问题的pubsub工具
     private final EventBus eventBus;
     // 节点间通信端口
@@ -45,26 +43,18 @@ public class NioConnector implements Connector {
         return thread;
     });
 
-    public NioConnector(NodeId selfNodeId, EventBus eventBus, int port, int logReplicationInterval) {
-        this(new NioEventLoopGroup(), false, selfNodeId, eventBus, port, logReplicationInterval);
-    }
-
-    public NioConnector(NioEventLoopGroup workerNioEventLoopGroup, NodeId selfNodeId, EventBus eventBus, int port, int logReplicationInterval) {
-        this(workerNioEventLoopGroup, true, selfNodeId, eventBus, port, logReplicationInterval);
-    }
-
-    public NioConnector(NioEventLoopGroup workerNioEventLoopGroup, boolean workerGroupShared,
+    //初始化连接器信息，包括工作线程为10，工作线程不共享，当前连接器的对应节点的ID，eventBUS,服务端口，日志复制间隔
+    public NioConnector(NioEventLoopGroup workerNioEventLoopGroup,
                         NodeId selfNodeId, EventBus eventBus,
                         int port, int logReplicationInterval) {
         // 复用工作线程池
         this.workerNioEventLoopGroup = workerNioEventLoopGroup;
-        this.workerGroupShared = workerGroupShared;
         this.eventBus = eventBus;
         this.port = port;
         outboundChannelGroup = new OutboundChannelGroup(workerNioEventLoopGroup, eventBus, selfNodeId, logReplicationInterval);
     }
 
-    // should not call more than once
+    //2333
     @Override
     public void initialize() {
         ServerBootstrap serverBootstrap = new ServerBootstrap()
@@ -97,6 +87,10 @@ public class NioConnector implements Connector {
         }
     }
 
+    private Channel getChannel(NodeEndpoint endpoint) {
+        // 按照节点id创建或者获取 连接 对端节点的channel
+        return outboundChannelGroup.getOrConnect(endpoint.getId(), endpoint.getAddress());
+    }
     private void logException(Throwable e) {
         if (e instanceof ChannelConnectException) {
             logger.warn(e.getMessage());
@@ -154,10 +148,7 @@ public class NioConnector implements Connector {
         inboundChannelGroup.closeAll();
     }
 
-    private Channel getChannel(NodeEndpoint endpoint) {
-        // 按照节点id创建或者获取 连接 对端节点的channel
-        return outboundChannelGroup.getOrConnect(endpoint.getId(), endpoint.getAddress());
-    }
+
 
     @Override
     public void close() {
@@ -165,8 +156,6 @@ public class NioConnector implements Connector {
         inboundChannelGroup.closeAll();
         outboundChannelGroup.closeAll();
         bossNioEventLoopGroup.shutdownGracefully();
-        if (!workerGroupShared) {
-            workerNioEventLoopGroup.shutdownGracefully();
-        }
+        workerNioEventLoopGroup.shutdownGracefully();
     }
 }

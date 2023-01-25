@@ -31,6 +31,7 @@ public class CommandContext {
         for (NodeId nodeId : serverMap.keySet()) {
             Address address = serverMap.get(nodeId);
             //构建服务器路由表,路由表实际上是根据Host和port创建了一个连接管道
+            //A,localhost,3333 B,localhost,3334 C,localhost,3335
             router.add(nodeId, new SocketChannel(address.getHost(), address.getPort()));
         }
         return router;

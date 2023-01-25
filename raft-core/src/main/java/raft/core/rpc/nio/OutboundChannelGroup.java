@@ -33,17 +33,19 @@ public class OutboundChannelGroup {
     /**
      * 实现了一个线程安全的惰性连接方法，getChannel方法根据EndPoint查找可用的连接
      * 如果找不到就新建一个连接。这是一个惰性连接方法。放到channelmap当中
-     * @param nodeId
-     * @param address
-     * @return
      */
     NioChannel getOrConnect(NodeId nodeId, Address address) {
         Future<NioChannel> future = channelMap.get(nodeId);
         if (future == null) {
+            //这一步只是创建一个任务
             FutureTask<NioChannel> newFuture = new FutureTask<>(() -> connect(nodeId, address));
+            // 返回值：
+            //（1）如果是新的记录，那么会向map中添加该键值对，并返回null。
+            //（2）如果已经存在，那么不会覆盖已有的值，直接返回已经存在的值。
             future = channelMap.putIfAbsent(nodeId, newFuture);
             if (future == null) {
                 future = newFuture;
+                //运行任务(建立一个Client处理器去连接对应节点的Server处理器)
                 newFuture.run();
             }
         }
@@ -51,22 +53,13 @@ public class OutboundChannelGroup {
             return future.get();
         } catch (Exception e) {
             channelMap.remove(nodeId);
-            if (e instanceof ExecutionException) {
-                Throwable cause = e.getCause();
-                if (cause instanceof ConnectException) {
-                    throw new ChannelConnectException("failed to get channel to node " + nodeId +
-                            ", cause " + cause.getMessage(), cause);
-                }
-            }
             throw new ChannelException("failed to get channel to node " + nodeId, e);
         }
     }
     /**
      * 连接远程节点
-     * @param nodeId
-     * @param address
-     * @return
-     * @throws InterruptedException
+     * nodeId为目标地NodeId
+     * Address为目标地Address
      */
     private NioChannel connect(NodeId nodeId, Address address) throws InterruptedException {
         Bootstrap bootstrap = new Bootstrap()
@@ -78,8 +71,8 @@ public class OutboundChannelGroup {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
-                        pipeline.addLast(new Decoder());
-                        pipeline.addLast(new Encoder());
+                        pipeline.addLast(new Decoder());//解析请求
+                        pipeline.addLast(new Encoder());//封装响应
                         pipeline.addLast(new ToRemoteHandler(eventBus, nodeId, selfNodeId));
                     }
                 });
@@ -111,3 +104,12 @@ public class OutboundChannelGroup {
         });
     }
 }
+
+
+// if (e instanceof ExecutionException) {
+//                Throwable cause = e.getCause();
+//                if (cause instanceof ConnectException) {
+//                    throw new ChannelConnectException("failed to get channel to node " + nodeId +
+//                            ", cause " + cause.getMessage(), cause);
+//                }
+//            }

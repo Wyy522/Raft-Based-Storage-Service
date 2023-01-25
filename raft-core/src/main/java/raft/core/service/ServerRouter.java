@@ -30,11 +30,10 @@ public class ServerRouter {
 
     //发送消息
     public Object send(Object payload){
-
         //遍历服务路由表内所有节点(在某个节点返回未响应时，发送到其他节点)
         for (NodeId nodeId : getCandidateNodeIds()) {
             try {
-                Object result = doSend(nodeId, payload);
+                Object result = doSend(nodeId, payload);//A
                 this.leaderId = nodeId;
                 return result;
             } catch (RedirectException e) {
