@@ -10,13 +10,13 @@
 >
 > 什么是分布式系统，分布式与集群的区别？
 >
-> 答：由于普通的单机服务器面对业务量巨大的场景下无法满足要求,垂直扩展升级机器硬件和水平扩展堆廉价服务器是两种最常见的解决方案,目前互联网领域绝大多数选择了后者水平扩展,也就是加机器。分布式(distributed): 在多台不同的服务器中部署不同的服务模块,通过[远程调用](https://so.csdn.net/so/search?q=远程调用&spm=1001.2101.3001.7020)协同工作,对外提供服务。集群(cluster): 在多台不同的服务器中部署相同的应用和服务模块,通过负载均衡设备对外提供服务
+> 答：由于普通的单机服务器面对业务量巨大的场景下无法满足要求,垂直扩展升级机器硬件和水平扩展堆廉价服务器是两种最常见的解决方案,目前互联网领域绝大多数选择了后者水平扩展,也就是加机器。分布式(distributed): 在多台不同的服务器中部署不同的服务模块,通过远程调用协同工作,对外提供服务。集群(cluster): 在多台不同的服务器中部署相同的应用和服务模块,通过负载均衡设备对外提供服务
 
 ## 二、整体架构
 
   **该项目的整体架构分为raft-kvservice对外服务模块、raft-core核心模块、raft-store存储模块三部分。**
 
-<img src=".\readme-pitcher\架构.jpg" style="zoom:150%;" />
+<img src="D:\Learn\Java\极客\Raft_learning\raft - 副本\readme-pitcher\架构.jpg" alt="架构" style="zoom:150%;" />
 
 ### 简单介绍：
 
@@ -61,7 +61,7 @@ public void start() throws Exception {
 
 ​		2.Client在启动时需要获得集群内活跃Server的Endpoint(NodeId,Host,Port)信息，通过这些Endpoint构建一个连接客户端的通道SocketChannel保存到核心模块中的ServerRouter路由表中。目的是在发送命令时，Client无需关注接收端是谁，路由表会根据Endpoint所对应的核心节点的所处状态来选择合适的进行发送(一般情况下由Leader节点接收)。以下是ServerRouter的结构。
 
-![](D:\桌面\Raft的md\ServerRouter.jpg)
+![ServerRouter](D:\Learn\Java\极客\Raft_learning\raft - 副本\readme-pitcher\ServerRouter.jpg)
 
 ``` java
 // 构建服务路由表
@@ -97,7 +97,7 @@ private ServerRouter buildServerRouter(Map<NodeId, Address> serverMap) {
 
 ​		3.由于是使用Tcp进行通信,消息可能会出现半包/粘包的问题,所以在对消息序列化和反序列化时需要特别处理，而不是仅仅转换数据。我这里给出的解决办法是在消息前加上4字节表示消息类型,4字节表示消息长度,其余字节表示消息内容。
 
-![](D:\桌面\Raft的md\ClientMessage.png)
+![ClientMessage](D:\Learn\Java\极客\Raft_learning\raft - 副本\readme-pitcher\ClientMessage.png)
 
 ``` java
 private void write(OutputStream output, int messageType, MessageLite message) throws IOException {
@@ -113,7 +113,7 @@ private void write(OutputStream output, int messageType, MessageLite message) th
 
 ​		4.大概运行流程
 
-![](D:\桌面\Raft的md\raft-kvservice的流程.png)
+![raft-kvservice的流程](D:\Learn\Java\极客\Raft_learning\raft - 副本\readme-pitcher\raft-kvservice的流程.png)
 
 ### （二）核心模块(raft-core)
 
