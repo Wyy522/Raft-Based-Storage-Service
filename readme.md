@@ -2,7 +2,7 @@
 
 ## 一、简介
 
-​         该项目参考《In Search of an Understandable Consensus Algorithm》论文实现Raft协议中三个子问题中的前两个，领导人选举(Leader election)和日志复制(Log replication)。使用网络编程框架Netty处理核心节点之间的RPC(RequestVote RPC和AppendEntries RPC)请求交互，核心节点同时也开启对外服务端口等待客户端连接发送命令。接收到来自客户端的Get、Set命令后Leader节点通过AppendEntries RPC保证集群内节点将命令中的数据以Lsm-tree的结构持久化落盘。
+​         该项目参考《In Search of an Understandable Consensus Algorithm》论文实现Raft协议中三个子问题中的前两个，领导人选举(Leader election)和日志复制(Log replication)。使用网络编程框架Netty处理核心节点之间的RPC(RequestVote RPC和AppendEntries RPC)请求交互，核心节点同时也开启对外服务端口等待客户端连接发送命令。接收到来自客户端的Get、Set命令后Leader节点通过AppendEntries RPC保证集群内节点将命令中的数据以Lsm-tree的存储策略持久化落盘。
 
 > 分布式共识算法那么多,为什么使用Raft ?
 >
@@ -123,12 +123,123 @@ private void write(OutputStream output, int messageType, MessageLite message) th
 
 
 
-### （三）存储模块(raft-store)
+### （三）存储模块(raft-store)	
 
-存储模块是客户端的命令到达的最后一个模块，该模块主要由自己独立设计的LSM-Tree构成。关于Lsm-Tree，推荐一本书[《Designing Data-Intensive Applications》](http://shop.oreilly.com/product/0636920032175.do)(DDIA),这本书由浅入深详细的阐述了Lsm-Tree是一个什么样的数据结构。
+​		存储模块是客户端的命令到达的最后一个模块，该模块主要由自己独立设计的LSM-Tree构成。关于Lsm-Tree，推荐一本书[《Designing Data-Intensive Applications》](http://shop.oreilly.com/product/0636920032175.do)(DDIA),这本书的第三章节由浅入深详细的阐述了Lsm-Tree，值得一看！
 
 > 为什么选择Lsm-Tree而不是B+Tree?
+
+<img src=".\readme-pitcher\Lsm-tree架构.jpg" alt="Lsm-Tree架构.png" style="zoom:100%;" />
+
+#### 	1.WAL(write ahead log)
+
+​			数据到达存储模块的第一站便是WAL预写日志中,由于预写日志是直接写入磁盘的,由于数据持久化的过程可能比较费时,所以有可能会在持久化的过程中突然发送宕机或者断电,从而导致数据丢失，而预先写入WAL中便可以在系统修复后重新加载到内存持久化的。该项目中的WAL设计较为简单(拿到数据就往文件里怼)。
+
+```java
+public void set(String key, String value) throws IOException, InterruptedException {
+        Command command = new Command(1, key, value);
+        wal.write(command);//接到数据就写WAL
+        if (!memTable.puts(command)) {
+            this.memTable = new MemTable(eventBus);
+            memTable.puts(command);
+        }
+    }
+```
+
+```java
+public void write(Command command) throws IOException {
+        byte[] commandBytes = JSON.toJSONBytes(command);
+        writer.writeInt(commandBytes.length);	//4字节  写入数据长度
+        writer.write(commandBytes);				//不定长 写入二进制数据
+    }
+```
+
+<img src=".\readme-pitcher\wal-store.png" alt="wal-store.png" style="zoom:100%;" />
+
+#### 	2.MemTable
+
+​			数据写完WAL后会立即写入到MemTable中,是基于内存实现的有序集合,可以有多种实现方式。该项目直接使用java.util包下原生的TreeMap来实现MemTable这一组件。TreeMap的底层是红黑树，可以按照自然顺序进行排序或者根据创建映射时提供的Comparator接口进行排序。从存储角度而言，这比HashMap的O(1)时间复杂度要差些；但是在统计性能上，TreeMap同样可以保证log(N)的时间开销，这又比HashMap的O(N)时间复杂度好不少。
+
+``` java
+public class MemTable {
+    TreeMap<String, Command> memTable;
+    private int levelNumb;//层号
+    private int numb;//页号
+    private int memTableLength;//当前MemTable大小(用来判断是否达到阈值)
+    private volatile boolean isImmTable = false;//判断当前MemTable是否正在持久化
+}
+```
+
+
+
+>  为什么必须要是有序集合？
 >
+> 答：是为了保证持久化到SSTable中时仍能保持顺序性。我们通常会给SSTable中加上稀疏索引，这样便可以快速通过索引来定位到数据所在的范围，再通过二分查找快速锁定数据。
+
+当MemTable中的数据达到一定的阈值时会异步的进行Flush操作,同时再创建一个新的MemTable用来接收数据。通过上面Lsm-Tree的架构图可以得知第一次Flush操作称为Minor Compaction,而之后对SSTable的操作称为Major Compactionm。这是因为首次Flush并不会对MemTable中的数据进行去重操作(体现Lsm-tree的快)，也就是说存入磁盘里的数据有可能是重复的。而之后对SSTable操作是需要去重的，一是为了节省空间，二是为了加速查询。
+
+####     3.SSTable
+
+​		数据的最后一站就是SSTable,也是存储模块中最复杂的一部分(当然离工程化还差很远)。该项目所设计的SSTable分为四部分,分别为元数据、稀疏索引、布隆过滤器以及数据区,一个SSTable对应一个实实在在4K大小的文件。元数据和稀疏索引通常是被放置在前1K个字节中的,而后面的3K个字节存放真正的数据。
+
+<img src=".\readme-pitcher\SSTable.jpg" alt="SSTable.png" style="zoom:100%;" />
+
+> 为什么要这样设计？
+>
+> 答：由于磁盘的存取单位是一个一个4K大小的块,所以当以4的整倍数存取数据时对于磁盘来说是最高效的。同时也为了下面优化时可以并行的进行Merge。
+
+​		(1)首先是元数据的设计,其包括了当前SSTable是第几层的第几个的(这在Merge时有重要作用),也包括了数据的基本信息。固定其大小为20字节方便找到稀疏索引快速查询。
+
+​	<img src=".\readme-pitcher\MetaData.png" alt="MetaData.png" style="zoom:100%;" />
+
+```java
+public class SSTableMetaData {
+    private int numb;//当前层的第几个文件(numb越大数据越新)
+    private int level;//第几层的文件(level越大数据越旧)
+    private long dataOffset;//数据偏移量
+    private int dataLen;//数据总长度
+}
+```
+
+
+
+​		(2)其次是稀疏索引的设计，稀疏索引记录了每1K数据的第一条数据的内容、页号、偏移量、长度。以便在查询直接判断Key值快速锁定数据范围,通过偏移量直接读取数据。
+
+<img src=".\readme-pitcher\ParseIndex.jpg" alt="ParseIndex.png" style="zoom:100%;" />
+
+```java
+public  class SparseIndexItem {
+     private  String key;//键
+     private  String value;//值
+     private  int pageNumb;//页号
+     private  long offset;//数据偏移量
+     private  int len;//长度
+}
+```
+
+​		(3)最后是数据的设计,一条数据包括了操作类型,Key值，Value值，以及系统生成的页号。
+
+<img src=".\readme-pitcher\Data.png" alt="Data.png" style="zoom:100%;" />
+
+``` java
+public class Command{
+    private int op;//操作类型 支持GET SET DEL
+    private String key;//键
+    private String value;//值
+    private int numb;//页号
+
+}
+```
+
+
+
+#### 4.写入流程
+
+#### 5.查询流程
+
+#### 6.合并流程
+
+
 
 
 

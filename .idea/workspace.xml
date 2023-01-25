@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="review" />
+    <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="review">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/MemTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-store/src/main/java/raft/store/MemTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -294,7 +298,7 @@
       <workItem from="1674234876965" duration="675000" />
       <workItem from="1674471351816" duration="20305000" />
       <workItem from="1674535036777" duration="27238000" />
-      <workItem from="1674632470115" duration="9240000" />
+      <workItem from="1674632470115" duration="16221000" />
     </task>
     <task id="LOCAL-00001" summary="review">
       <created>1674566881256</created>

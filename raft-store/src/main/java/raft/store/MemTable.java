@@ -10,12 +10,15 @@ import static raft.store.Constant.TEST_MERGE_PAGE_MAX;
 
 
 public class MemTable {
+
     TreeMap<String, Command> memTable;
     private int levelNumb;
     private int numb;
     private int memTableLength;
-    EventBus eventBus;
     private volatile boolean isImmTable = false;
+
+
+    EventBus eventBus;
     ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
     public MemTable() {
@@ -41,7 +44,6 @@ public class MemTable {
         try {
             lock.writeLock().lock();
             memTableLength += command.getBytes(command);
-//            if (memTableLength <= PAGE_SIZE) {
             if (memTableLength <= TEST_MERGE_PAGE_MAX) {
                 memTable.put(command.getKey(), command);
                 return true;
