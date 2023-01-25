@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="review">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/node/NodeImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/Decoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/Decoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/InboundChannelGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/InboundChannelGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/NioConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/NioConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/OutboundChannelGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/rpc/nio/OutboundChannelGroup.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/ServerRouter.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-core/src/main/java/raft/core/service/ServerRouter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/CommandContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/client/CommandContext.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Encoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Encoder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServerLauncher.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServerLauncher.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/Service.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServiceHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/raft-kvstore/src/main/java/raft/kvstore/server/ServiceHandler.java" afterDir="false" />
-    </list>
+    <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="review" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -309,7 +294,7 @@
       <workItem from="1674234876965" duration="675000" />
       <workItem from="1674471351816" duration="20305000" />
       <workItem from="1674535036777" duration="27238000" />
-      <workItem from="1674632470115" duration="8642000" />
+      <workItem from="1674632470115" duration="9240000" />
     </task>
     <task id="LOCAL-00001" summary="review">
       <created>1674566881256</created>
