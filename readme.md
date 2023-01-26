@@ -18,7 +18,7 @@
 
 <img src=".\readme-pitcher\架构.jpg" alt="架构" style="zoom:150%;" />
 
-### 简单介绍：
+### 简单介绍
 
 * 对外服务模块(raft-kvservice)：负责将client的读写请求通过Server中自定义的Decode解析后转发给核心模块进行处理,再由核心模块将处理结果转发给Server，Server通过自定义的Encoder封装响应最终回复client。
 
@@ -99,7 +99,7 @@ private ServerRouter buildServerRouter(Map<NodeId, Address> serverMap) {
     }
 ```
 
-		#### 3.解决半包粘包
+#### 3.解决半包粘包
 
 ​		由于是使用Tcp进行通信,消息可能会出现半包/粘包的问题,所以在对消息序列化和反序列化时需要特别处理,而不是仅仅转换数据。我这里给出的解决办法是在消息前加上4字节表示消息类型,4字节表示消息长度,其余字节表示消息内容。
 
@@ -122,9 +122,7 @@ private void write(OutputStream output, int messageType, MessageLite message) th
 
 ### （二）核心模块(raft-core)
 
-​		核心模块是该项目中的大脑,负责处理对外服务模块的请求和同步数据保证整个集群的强一致性。该模块主要分为领导人选举,
-
-日志复制，节点间的RPC通信三部分。
+​		核心模块是该项目中的大脑,负责处理对外服务模块的请求和同步数据保证整个集群的强一致性。该模块主要分为领导人选举,日志复制，节点间的RPC通信三部分。
 
 #### 1.领导人选举
 
@@ -183,7 +181,7 @@ public LogReplicationTask scheduleLogReplicationTask(Runnable task) {
 
 #### 3.节点间的通信
 
-​			还没想好咋写。。。
+​			构思中~
 
 ### （三）存储模块(raft-store)	
 
@@ -216,7 +214,7 @@ public void set(String key, String value) throws IOException, InterruptedExcepti
 public void write(Command command) throws IOException {
         byte[] commandBytes = JSON.toJSONBytes(command);
         writer.writeInt(commandBytes.length);	//4字节  写入数据长度
-        writer.write(commandBytes);				//不定长 写入二进制数据
+        writer.write(commandBytes);	//不定长 写入二进制数据
     }
 ```
 
@@ -246,13 +244,15 @@ public class MemTable {
 
 ####     3.SSTable
 
-​		数据的最后一站就是SSTable,也是存储模块中最复杂的一部分(当然离工程化还差很远)。该项目所设计的SSTable分为四部分,分别为元数据、稀疏索引、布隆过滤器以及数据区,一个SSTable对应一个实实在在4K大小的文件。元数据和稀疏索引通常是被放置在前1K个字节中的,而后面的3K个字节存放真正的数据。
+​		数据的最后一站就是SSTable,也是存储模块中最复杂的一部分(当然离工程化还差很远)。该项目所设计的SSTable分为四部分,分别为元数据、稀疏索引、布隆过滤器以及数据区,一个SSTable对应一个实实在在16K大小的文件。元数据、稀疏索引和布隆过滤器是被放置在0~4K中,而后面空间存放真正的数据。
 
-<img src=".\readme-pitcher\SSTable.jpg" alt="SSTable.png" style="zoom:100%;" />
+​		由于数据积累的越来越多,SSTable个数量会不断增加并且第一层的SSTable里的数据是有可能重复的,此时就需要进行合并(Merge)来节省空间,加快查询的速度。合并后的SSTable会放在第二层中,当第二层中的SSTable过多时就需要继续进行合并。合并后继续放在下一层,层数越大对应的数据就越旧。
+
+<img src=".\readme-pitcher\SSTable.png" alt="SSTable.png" style="zoom:100%;" />
 
 > 为什么要这样设计？
 >
-> 答：由于磁盘的存取单位是一个一个4K大小的块,所以当以4的整倍数存取数据时对于磁盘来说是最高效的。同时也为了下面优化时可以并行的进行Merge。
+> 答：由于磁盘的存取单位是一个一个4K大小的块,所以当以4的整倍数存取数据时对于磁盘来说是最高效的。同时也为下面优化时可以并行的进行合并(Merge)。
 
 ​		(1)首先是元数据的设计,其包括了当前SSTable是第几层的第几个的(这在Merge时有重要作用),也包括了数据的基本信息。固定其大小为20字节方便找到稀疏索引快速查询。
 
@@ -301,12 +301,67 @@ public class Command{
 
 ### （一）写入流程
 
-​		
+1. Client在命令行中输入kvstore-set key value以Tcp的方式发送给Server(事实上Server就是核心节点启动时一同启动的对外服务器)
+2. Server解析完命令根据命令类型封装成对应类型的请求发送核心模块中的Leader节点
+3. Leader接收到请求后以广播的形式发送AppendEntries RPC给Follower节点
+4. Follower接收到RPC,解析RPC中的命令数据,确认没问题后确认回复Leader
+5. Leader收到大多数节点成功的RPC后发送以广播的形式发送提交请求给Follower节点,同时回复Server操作成功,Server回复ClientOK
+6. Follower接收到提交请求后开启异步持久化任务
+7. 数据首先写入基于磁盘实现的WAL中以防断电丢失,紧接着写入基于内存实现有序集合MemTable中
+8. 当MemTale中的数据达到一定阈值后立即变为不可用状态，同时创建一个新的MemTable继续服务。
+9. 变为不可用状态的MemTable开始持久化到SSTable中,首先seek到4K字节的位置开始写数据,每写一页记录一条数据到稀疏索引中
+10. 等到MemTable中的数据都写完时,seek到0位置写入元数据信息和稀疏索引,构成SSTable文件。
+11. 清空WAL，至此整个写入流程结束(删除流程和写入流程差不多,只是给这个Key加了一条墓碑记录)
 
 ### （二）查询流程
 
-
+1. Client在命令行中输入kvstore-get key以Tcp的方式发送给Server(事实上Server就是核心节点启动时一同启动的对外服务器)
+2. Server解析完命令根据命令类型封装成对应类型的请求发送核心模块中的Leader节点
+3. Leader节点将请求解析出来后交给存储模块
+4. 首先会在内存中的MemTable中查找,若通过Key找到对应的Value,则直接返回。若未找到,则加载第一层最新的SSTable文件到内存中
+5. 将稀疏索引解析出来,若Key在稀疏索引中记录的Key的范围内,则直接seek到稀疏索引中记录的offset,将这页数据解析出来通过二分法进行查找,若通过Key可以找到对应的Value,则直接返回。
+6. 若未找到,则加载这一层的下一个SSTable文件重复第5步操作
+7. 直到这一层的SSTable文件都访问过，若还未找到,则进入下一层重复上述操作
+8. Leader收到来自存储模块的处理结果,返回给Server,Server最终回复Client
 
 ### （三）合并流程
 
+​		当一层的SSTable过多时为了加快查询的速度以及节省空间,此时需要对SSTable进行合并。基于LSM-Tree分层存储能够做到写的高吞吐,但同时带来的副作用是整个系统会频繁Merge,写入量越大,Merge越频繁。而Merge非常消耗CPU和存储IO，在高吞吐的写入情形下，大量的Merge操作占用大量系统资源，必然带来整个系统性能断崖式下跌，对应用系统产生巨大影响。
+
+​		这里介绍的是本人在思考过程中给出的优化的解决方案，接下来举例说明。
+
+<img src=".\readme-pitcher\Merge1.png" alt="Data.png" style="zoom:100%;" />
+
+​		假设现在需要将这两个SSTable合并，这里有几点要说明一下。第一,这里只展示了SSTable中存放数据的部分，因为第0块的信息是根据我们合并之后的SSTable进行构造生成的。第二,因为合并只关乎到Key的值,和value并没有产生直接联系,所以我们这里不关乎Value的值。第三,我们可以看到Key的值是按照顺序排列的,这是因为数据在MemTable中就是有序的,我们会借助这个特性来优化合并流程。第四,这里的命名规则，第一个0表示这是第0层,后面的1和2表示是这一层的第几个文件(数越大数据越新)。
+
+##### 			1.加载
+
+​			由于我们在一开始就是根据磁盘的存取单元是4K这一特性来存放数据的,所以我们这是可以同时开启三个线程,每个线程seek到块号*4K的位置开始加载文件。
+
+<img src=".\readme-pitcher\Merge2.png" alt="Merge2.png" style="zoom:90%;" />
+
+##### 			2.去重排序
+
+​			这时发现线程1中和线程3中有重复的Key值,由于SSTable0-2在是SSTable0-1之后生成的,所以SSTable0-2的数据比SSTable0-1新。接下来我们就需要根据这一规则去重。
+
+<img src=".\readme-pitcher\Merge3.png" alt="Merge3.png" style="zoom:90%;" />
+
+##### 			3.合并再去重
+
+​			经过第2步去重排序后我们发现单个线程中不会存在重复的数据,线程1里留下的9是SSTable0-2中的9而不是SSTable0-1里的(因为它较新,同理线程2中的28)。但这时又发现一个问题,线程1和线程2中出现了同样的Key,线程2和线程3也存在同样的Key，这时我们只需要合并再进行一次第2步就可以解决。
+
+<img src=".\readme-pitcher\Merge4.png" alt="Merge4.png" style="zoom:90%;" />
+
+##### 			4.创建下层的SSTable
+
+​			完成第3步后我们就得到了真正的去重后并且排好序的数据了,这时我们就需要将这些内存里的数据构建稀疏索引、元数据信息、写数据到文件这一系列操作后持久化到磁盘,才算完成合并操作(新生成的文件命名为SSTable1-1表示是第一层的第一个SSTable)。
+
+<img src=".\readme-pitcher\Merge5.png" alt="Merge4.png" style="zoom:120%;" />
+
+> 到这里SSTable就不只是16K那么大了,因为随着层级的变多,每次合并后的结果都会有比原来的SSTable大。这里举的例子数据量比较小,本人认为如果数据量很大,这种根据文件偏移量并行的进行合并操作是可行的。
+
 ## 五、总结
+
+​		这是我第一次写博客,也是第一次将自己的项目进行总结,不得不说总结的过程是很难受的。因为有很多地方知道是如何实现的但不能表述的很清楚，也有很多知识点记得有些模糊了,需要重新翻阅资料巩固知识点。我也体验到了写文章的痛苦(还这么差劲,很感谢你能读到这里~)。通过这个项目让我感受到了Raft算法和Lsm-Tree的强大,目前越来越多的中间件仔细发觉都能看到它们的身影,Lsm-tree的实现有Tidb,Leveldb,Rocksdb,Hbase这些NoSql数据数据库,Raft有Etcd这个用Go语言实现的共享配置和服务发现组件。看着这些优秀的开源中间件，我也常常会想我几时也可以为这些优秀的开源中间件贡献自己的代码。我也深切的知道自己还不够格。目前这个项目待优化的地方还有很多,例如在合并过程中可以加入一些压缩算法,将数据进一步压缩,节省更多的磁盘空间。也可以在每个SSTable的头信息中构建出布隆过滤器来加快查询的速度,布隆过滤器的工作原理就是将文件中的Key通过Hash算法映射到一个bitmap中,当查询来临时先通过布隆过滤器来判断Key是否在这个SSTable中(它能保证不存在,但不能保证存在)。未来我将继续完善这个项目,学习新的技术并融入当中,最后附上一张2022年11月20日在天职师大教师中对该项目的构想。
+
+<img src=".\readme-pitcher\mind.jpg" alt="Merge4.png" style="zoom:120%;" />
