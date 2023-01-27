@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="eae469f5-87d4-4dd1-bde9-7e22851f1b7a" name="Changes" comment="review">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme-pitcher/SSTable.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -299,7 +298,8 @@
       <workItem from="1674471351816" duration="20305000" />
       <workItem from="1674535036777" duration="27238000" />
       <workItem from="1674632470115" duration="16257000" />
-      <workItem from="1674717553306" duration="7676000" />
+      <workItem from="1674717553306" duration="8295000" />
+      <workItem from="1674821962875" duration="33000" />
     </task>
     <task id="LOCAL-00001" summary="review">
       <created>1674566881256</created>
